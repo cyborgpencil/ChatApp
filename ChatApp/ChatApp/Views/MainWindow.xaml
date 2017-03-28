@@ -21,10 +21,10 @@
             <StackPanel Orientation="Horizontal" Margin="2">
                 <TextBlock Text="Name:" Background="Wheat" Margin="2" Padding="5"/>
                 <TextBox Margin="2" Background="White"  Width="300"/>
-                <Button Content="Submit" Margin="600,2,2,2" Height="40" Width="60" Padding="5"/>
+                <Button Content="Submit" Margin="600,2,2,2" Height="40" Width="60" Padding="5" Command="{Binding Path=SubmitCommand}"/>
             </StackPanel>
             <StatusBar Margin="5">
-                <TextBlock Text="{Binding Path=StatusMessage}"/>
+                <TextBlock Text="{Binding Path=StatusMessage, Mode=TwoWay}"/>
             </StatusBar>
         </StackPanel>
     </StackPanel>

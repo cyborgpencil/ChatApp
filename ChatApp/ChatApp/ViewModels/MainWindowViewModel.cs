@@ -1,5 +1,8 @@
-﻿using ChatApp.Models;
+﻿using ChatApp.Events;
+using ChatApp.Models;
 using Prism;
+using Prism.Commands;
+using Prism.Events;
 using Prism.Mvvm;
 using System;
 using System.Collections.Generic;
@@ -24,11 +27,47 @@ namespace ChatApp.ViewModels
             get { return _statusMessage; }
             set { SetProperty(ref _statusMessage, value); }
         }
-        public MainWindowViewModel()
+        private ClientController _clientController;
+        public ClientController ClientController
         {
+            get { return _clientController; }
+            set { SetProperty(ref _clientController, value); }
+        }
+        private IEventAggregator _eventAggregator;
+        private DelegateCommand _submitCommand;
+        public DelegateCommand SubmitCommand
+        {
+            get { return _submitCommand; }
+            set { SetProperty(ref _submitCommand, value); }
+        }
+
+        public MainWindowViewModel() 
+        {
+          
+
+        }
+
+        public MainWindowViewModel(IEventAggregator eventAggregator) :this()
+        {
+            ClientController = new ClientController();
+            SubmitCommand = new DelegateCommand(CheckServer);
+
             CharUser = new ChatUser();
             StatusMessage = "Connecting to Server...";
 
+            _eventAggregator = eventAggregator;
+           
+        }
+
+        private void UpdateMessage(string obj)
+        {
+            StatusMessage = obj;
+        }
+
+        private void CheckServer()
+        {
+            _eventAggregator.GetEvent<UpdateServerMessageEvent>().Subscribe(UpdateMessage);
+            ClientController.ConnectToServer();
         }
     }
 }
