@@ -7,7 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace ChatApp.ViewModel
+namespace ChatApp.ViewModels
 {
     public class MainWindowViewModel : BindableBase
     {
@@ -17,9 +17,17 @@ namespace ChatApp.ViewModel
             get { return _charUser; }
             set { SetProperty(ref _charUser, value); }
         }
+
+        private string _statusMessage;
+        public string StatusMessage
+        {
+            get { return _statusMessage; }
+            set { SetProperty(ref _statusMessage, value); }
+        }
         public MainWindowViewModel()
         {
             CharUser = new ChatUser();
+            StatusMessage = "Connecting to Server...";
 
         }
     }

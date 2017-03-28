@@ -24,7 +24,7 @@
                 <Button Content="Submit" Margin="600,2,2,2" Height="40" Width="60" Padding="5"/>
             </StackPanel>
             <StatusBar Margin="5">
-                <TextBlock Text="Testing"/>
+                <TextBlock Text="{Binding Path=StatusMessage}"/>
             </StatusBar>
         </StackPanel>
     </StackPanel>

@@ -87,6 +87,7 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Bootstrap.cs" />
+    <Compile Include="Events\EventClasses.cs" />
     <Compile Include="Models\ChatUser.cs" />
     <Compile Include="ViewModels\ClientController.cs" />
     <Compile Include="ViewModels\MainWindowViewModel.cs" />
