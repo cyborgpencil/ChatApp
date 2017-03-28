@@ -87,6 +87,8 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Bootstrap.cs" />
+    <Compile Include="Models\ChatUser.cs" />
+    <Compile Include="ViewModels\ClientController.cs" />
     <Compile Include="ViewModels\MainWindowViewModel.cs" />
     <Compile Include="Views\MainWindow.xaml.cs">
       <DependentUpon>MainWindow.xaml</DependentUpon>
@@ -120,8 +122,6 @@
   <ItemGroup>
     <None Include="App.config" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Models\" />
-  </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

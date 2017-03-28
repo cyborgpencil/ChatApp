@@ -7,11 +7,11 @@ namespace ChatApp
     /// </summary>
     public partial class App : Application
     {
-        public void Run()
+        protected override void OnStartup(StartupEventArgs e)
         {
+            base.OnStartup(e);
             Bootstrap bs = new Bootstrap();
             bs.Run();
         }
-       
     }
 }

@@ -6,9 +6,26 @@
         xmlns:prism="http://prismlibrary.com/"
         xmlns:local="clr-namespace:ChatApp"
         mc:Ignorable="d"
-        Title="ChatApp" Height="350" Width="525"
+        Title="ChatApp" Height="768" Width="1024"
         prism:ViewModelLocator.AutoWireViewModel="True">
-    <Grid>
-        
-    </Grid>
+    <StackPanel Background="Gray">
+        <StackPanel>
+            <StackPanel Orientation="Horizontal" Background="Beige">
+                <TextBlock Text="ChatLog" Margin="2" Padding="200,2,2,2"/>
+                <TextBlock Text="Logged On Users" Margin="2" Padding="600,2,2,2"/>
+            </StackPanel>
+            <StackPanel Orientation="Horizontal">
+                <ListView Background="White" Margin="5" Width="800" Height="600"/>
+                <ListBox Background="Wheat" Margin="5" Width="200" Height="600"/>
+            </StackPanel>
+            <StackPanel Orientation="Horizontal" Margin="2">
+                <TextBlock Text="Name:" Background="Wheat" Margin="2" Padding="5"/>
+                <TextBox Margin="2" Background="White"  Width="300"/>
+                <Button Content="Submit" Margin="600,2,2,2" Height="40" Width="60" Padding="5"/>
+            </StackPanel>
+            <StatusBar Margin="5">
+                <TextBlock Text="Testing"/>
+            </StatusBar>
+        </StackPanel>
+    </StackPanel>
 </Window>
