@@ -21,6 +21,10 @@ namespace ChatApp
             Application.Current.MainWindow.Show();
         }
 
-
+        protected override void ConfigureContainer()
+        {
+            base.ConfigureContainer();
+            Container.RegisterTypeForNavigation<ServerStatusView>("ServerStatusView");
+        }
     }
 }

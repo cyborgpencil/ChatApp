@@ -4,10 +4,18 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:prism="http://prismlibrary.com/"
-        xmlns:local="clr-namespace:ChatApp"
+        xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
         mc:Ignorable="d"
         Title="ChatApp" Height="768" Width="1024"
-        prism:ViewModelLocator.AutoWireViewModel="True">
+        prism:ViewModelLocator.AutoWireViewModel="True"
+        WindowStartupLocation="CenterScreen">
+
+    <i:Interaction.Triggers>
+        <i:EventTrigger EventName="Loaded">
+            <i:InvokeCommandAction Command="{Binding Path=LoadedCommand}" />
+        </i:EventTrigger>
+    </i:Interaction.Triggers>
+    
     <StackPanel Background="Gray">
         <StackPanel>
             <StackPanel Orientation="Horizontal" Background="Beige">
@@ -15,17 +23,16 @@
                 <TextBlock Text="Logged On Users" Margin="2" Padding="600,2,2,2"/>
             </StackPanel>
             <StackPanel Orientation="Horizontal">
-                <ListView Background="White" Margin="5" Width="800" Height="600"/>
+                <ListView Background="White" Margin="5" Width="800" Height="600" ItemsSource="{Binding Path=CurrentChatLog}"/>
                 <ListBox Background="Wheat" Margin="5" Width="200" Height="600"/>
             </StackPanel>
-            <StackPanel Orientation="Horizontal" Margin="2">
+            <StackPanel Orientation="Horizontal" Margin="2" FocusManager.FocusedElement="{Binding Path=TextChatFocus}">
                 <TextBlock Text="Name:" Background="Wheat" Margin="2" Padding="5"/>
-                <TextBox Margin="2" Background="White"  Width="300"/>
-                <Button Content="Submit" Margin="600,2,2,2" Height="40" Width="60" Padding="5" Command="{Binding Path=SubmitCommand}"/>
+                <TextBox Margin="2" Background="White"  Width="300" MaxLines="1" Text="{Binding Path=UserName, Mode=TwoWay}"/>
+                <TextBox Name="TextChat" Margin="2" Background="White"  Width="400" AcceptsReturn="True" ScrollViewer.HorizontalScrollBarVisibility="Disabled" VerticalScrollBarVisibility="Auto" MaxLines="2" TextWrapping="Wrap" Text="{Binding Path=ChatText, Mode=TwoWay}" SpellCheck.IsEnabled="True"/>
+                <Button Content="Submit" HorizontalAlignment="Right" Margin="190,2,2,0" Height="40" Width="60" Command="{Binding SubmitCommand}"/>
             </StackPanel>
-            <StatusBar Margin="5">
-                <TextBlock Text="{Binding Path=StatusMessage, Mode=TwoWay}"/>
-            </StatusBar>
+            <ContentControl prism:RegionManager.RegionName="StatusRegion" Margin="5"/>
         </StackPanel>
     </StackPanel>
 </Window>
