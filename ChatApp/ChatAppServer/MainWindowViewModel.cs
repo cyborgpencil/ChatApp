@@ -4,6 +4,7 @@ using Prism.Mvvm;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Diagnostics;
 using System.Linq;
 using System.Net;
 using System.Net.Sockets;
@@ -26,11 +27,13 @@ namespace ChatAppServer
         public DelegateCommand ServerStop { get; set; }
         private Socket serverSocketListener;
         private IPEndPoint serverEndpoint;
-        private byte[] buffer;
+        private byte[] _buffer;
         private int _connectingPort;
         private UserManager UserManage;
         private ServerCommandManager _serverCommManager;
-        public ManualResetEvent allDone; 
+        public ManualResetEvent allDone;
+        private Socket _clientSocket;
+        private string _readCallbackError;
 
         public MainWindowViewModel()
         {
@@ -68,49 +71,53 @@ namespace ChatAppServer
             // incoming data buffer
             byte[] buffer = new byte[1024];
             serverSocketListener = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
-            serverEndpoint = new IPEndPoint(Dns.GetHostEntry("127.0.0.1").AddressList[2], _connectingPort);
+            serverEndpoint = new IPEndPoint(IPAddress.Any, _connectingPort);
+            ServerStatusList.Add("Server Listening for Connections....");
 
             try
             {
                 serverSocketListener.Bind(serverEndpoint);
                 serverSocketListener.Listen(10);
+
                 
+                serverSocketListener.BeginAccept(new AsyncCallback(Acceptcallback), serverSocketListener);
 
-                while(true)
-                {
-                    allDone.Reset();
-
-                    ServerStatusList.Add("Server Listening for Connections....");
-                    serverSocketListener.BeginAccept(new AsyncCallback(Acceptcallback), serverSocketListener);
-
-                    allDone.WaitOne();
-                }
+              
             }
             catch (Exception e )
             {
-
-                ServerStatusList.Add(e.Message);
+                Debug.Write(e.Message);
             }
             
         }
 
         private void Acceptcallback(IAsyncResult ar)
         {
-            // continue main thread
-            allDone.Set();
+            try
+            {
+                _clientSocket = serverSocketListener.EndAccept(ar);
+                _buffer = new byte[_clientSocket.ReceiveBufferSize];
+                _clientSocket.BeginReceive(_buffer, 0, _buffer.Length, SocketFlags.None, new AsyncCallback(ReadCallback), null);
 
-            // Get socket handle for client request
-            Socket listener = (Socket)ar.AsyncState;
-            Socket handler = listener.EndAccept(ar);
-
-            byte[] buffer = new byte[1024];
-
-            handler.BeginReceive(buffer, 0, 1024, 0, new AsyncCallback(ReadCallback), listener);
+            }
+            catch (Exception e)
+            {
+                Debug.Write(e.Message);
+            }
         }
 
         private void ReadCallback(IAsyncResult ar)
         {
-            
+            try
+            {
+                
+                string receivedMessage = Encoding.ASCII.GetString(_buffer,0, _clientSocket.EndReceive(ar));
+                _clientSocket.BeginReceive(_buffer, 0, _buffer.Length, SocketFlags.None, new AsyncCallback(ReadCallback), null);
+            }
+            catch (Exception e)
+            {
+                Debug.Write(e.Message);
+            }
         }
     }
 }

@@ -8,7 +8,10 @@ using Prism.Regions;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Diagnostics;
 using System.Linq;
+using System.Net;
+using System.Net.Sockets;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -71,6 +74,8 @@ namespace ChatApp.ViewModels
         }
         private readonly IRegionManager _regionManager;
         public DelegateCommand LoadedCommand { get; set; }
+        private Socket _clientSocket;
+        private IPEndPoint ServerEndPoint;
 
         public MainWindowViewModel() 
         {
@@ -99,6 +104,45 @@ namespace ChatApp.ViewModels
         private void Loaded()
         {
             _regionManager.RequestNavigate("StatusRegion", "ServerStatusView");
+
+            try
+            {
+                _clientSocket = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
+                ServerEndPoint = new IPEndPoint(IPAddress.Loopback, 5555);
+                _clientSocket.BeginConnect(ServerEndPoint, new AsyncCallback(ConnectCallBack), null);
+            }
+            catch (Exception e)
+            {
+                Debug.Write(e.Message);
+            }
+
+        }
+
+        private void ConnectCallBack(IAsyncResult ar)
+        {
+            try
+            {
+                //send currentUsername
+                byte[] buffer = Encoding.ASCII.GetBytes(SetUserName());
+                _clientSocket.BeginSend(buffer, 0, buffer.Length, SocketFlags.None, new AsyncCallback(ReceiveCallBack), null);
+
+            }
+            catch (Exception e)
+            {
+                Debug.Write(e.Message);
+            }
+        }
+
+        private void ReceiveCallBack(IAsyncResult ar)
+        {
+            try
+            {
+                _clientSocket.EndSend(ar);
+            }
+            catch (Exception e)
+            { 
+                Debug.Write(e.Message);
+            }
         }
 
         private void TextSubmit()

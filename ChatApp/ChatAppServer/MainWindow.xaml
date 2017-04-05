@@ -5,9 +5,12 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:ChatAppServer"
         xmlns:prism="http://prismlibrary.com/"
+        xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
         mc:Ignorable="d"
         Title="ChatApp Server" Height="350" Width="525"
         prism:ViewModelLocator.AutoWireViewModel="True">
+
+    
     <StackPanel>
         <Button Content="Start Server" Command="{Binding Path=ServerStart}"/>
         <Button Content="Stop Server" Command="{Binding Path=ServerStop}"/>
